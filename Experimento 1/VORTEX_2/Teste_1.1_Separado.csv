@@ -1,0 +1,7 @@
+Metric,Value
+il1.miss_rate,0.1104
+dl1.miss_rate,0.0822
+ul2.miss_rate,0.0239
+itlb.miss_rate,0.0005
+dtlb.miss_rate,0.0006
+mem.ptab_miss_rate,0.0000

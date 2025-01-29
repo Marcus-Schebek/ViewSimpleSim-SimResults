@@ -1,0 +1,4 @@
+Metric,Value
+il1.miss_rate,0.0410
+dl1.miss_rate,0.0308
+mem.ptab_miss_rate,0.0001
