@@ -1,0 +1,73 @@
+Teste: Teste 1.1 Separado - FIFO - 4kB separado - Associação Direta
+Comando executado: ./sim-cache -cache:il1 il1:64:64:1:f -cache:dl1 dl1:64:64:1:f vortex.ss tiny.in
+
+sim: ** simulation statistics **
+sim_num_insn               65133533 # total number of instructions executed
+sim_num_refs               34988200 # total number of loads and stores executed
+sim_elapsed_time                  6 # total simulation time in seconds
+sim_inst_rate          10855588.8333 # simulation speed (in insts/sec)
+il1.accesses               65133533 # total number of accesses
+il1.hits                   57942850 # total number of hits
+il1.misses                  7190683 # total number of misses
+il1.replacements            7190619 # total number of replacements
+il1.writebacks                    0 # total number of writebacks
+il1.invalidations                 0 # total number of invalidations
+il1.miss_rate                0.1104 # miss rate (i.e., misses/ref)
+il1.repl_rate                0.1104 # replacement rate (i.e., repls/ref)
+il1.wb_rate                  0.0000 # writeback rate (i.e., wrbks/ref)
+il1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+dl1.accesses               44592067 # total number of accesses
+dl1.hits                   40925217 # total number of hits
+dl1.misses                  3666850 # total number of misses
+dl1.replacements            3666786 # total number of replacements
+dl1.writebacks              1420169 # total number of writebacks
+dl1.invalidations                 0 # total number of invalidations
+dl1.miss_rate                0.0822 # miss rate (i.e., misses/ref)
+dl1.repl_rate                0.0822 # replacement rate (i.e., repls/ref)
+dl1.wb_rate                  0.0318 # writeback rate (i.e., wrbks/ref)
+dl1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+ul2.accesses               12277702 # total number of accesses
+ul2.hits                   11983673 # total number of hits
+ul2.misses                   294029 # total number of misses
+ul2.replacements             289933 # total number of replacements
+ul2.writebacks               149519 # total number of writebacks
+ul2.invalidations                 0 # total number of invalidations
+ul2.miss_rate                0.0239 # miss rate (i.e., misses/ref)
+ul2.repl_rate                0.0236 # replacement rate (i.e., repls/ref)
+ul2.wb_rate                  0.0122 # writeback rate (i.e., wrbks/ref)
+ul2.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+itlb.accesses              65133533 # total number of accesses
+itlb.hits                  65102081 # total number of hits
+itlb.misses                   31452 # total number of misses
+itlb.replacements             31388 # total number of replacements
+itlb.writebacks                   0 # total number of writebacks
+itlb.invalidations                0 # total number of invalidations
+itlb.miss_rate               0.0005 # miss rate (i.e., misses/ref)
+itlb.repl_rate               0.0005 # replacement rate (i.e., repls/ref)
+itlb.wb_rate                 0.0000 # writeback rate (i.e., wrbks/ref)
+itlb.inv_rate                0.0000 # invalidation rate (i.e., invs/ref)
+dtlb.accesses              44592067 # total number of accesses
+dtlb.hits                  44564402 # total number of hits
+dtlb.misses                   27665 # total number of misses
+dtlb.replacements             27537 # total number of replacements
+dtlb.writebacks               10252 # total number of writebacks
+dtlb.invalidations                0 # total number of invalidations
+dtlb.miss_rate               0.0006 # miss rate (i.e., misses/ref)
+dtlb.repl_rate               0.0006 # replacement rate (i.e., repls/ref)
+dtlb.wb_rate                 0.0002 # writeback rate (i.e., wrbks/ref)
+dtlb.inv_rate                0.0000 # invalidation rate (i.e., invs/ref)
+ld_text_base             0x00400000 # program text (code) segment base
+ld_text_size                 990928 # program text (code) size in bytes
+ld_data_base             0x10000000 # program initialized data segment base
+ld_data_size                 129172 # program init'ed `.data' and uninit'ed `.bss' size in bytes
+ld_stack_base            0x7fffc000 # program stack segment base (highest address in stack)
+ld_stack_size                 16384 # program initial stack size
+ld_prog_entry            0x00400140 # program entry point (initial PC)
+ld_environ_base          0x7fff8000 # program environment base address address
+ld_target_big_endian              0 # target executable endian-ness, non-zero if big endian
+mem.page_count                 2323 # total number of pages allocated
+mem.page_mem                  9292k # total size of memory pages allocated
+mem.ptab_misses               13004 # total first level page table misses
+mem.ptab_accesses         355913482 # total page table accesses
+mem.ptab_miss_rate           0.0000 # first level page table miss rate
+

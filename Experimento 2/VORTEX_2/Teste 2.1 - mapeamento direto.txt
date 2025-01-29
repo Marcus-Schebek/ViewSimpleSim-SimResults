@@ -1,0 +1,41 @@
+./sim-cache -cache:il1 il1:1024:32:1:l -cache:dl1 dl1:1024:32:1:l -cache:il2 none -cache:dl2 none -tlb:itlb none -tlb:dtlb none vortex.ss tiny.in
+
+sim: ** simulation statistics **
+sim_num_insn               65008541 # total number of instructions executed
+sim_num_refs               34948670 # total number of loads and stores executed
+sim_elapsed_time                  8 # total simulation time in seconds
+sim_inst_rate          8126067.6250 # simulation speed (in insts/sec)
+il1.accesses               65008541 # total number of accesses
+il1.hits                   62344898 # total number of hits
+il1.misses                  2663643 # total number of misses
+il1.replacements            2662619 # total number of replacements
+il1.writebacks                    0 # total number of writebacks
+il1.invalidations                 0 # total number of invalidations
+il1.miss_rate                0.0410 # miss rate (i.e., misses/ref)
+il1.repl_rate                0.0410 # replacement rate (i.e., repls/ref)
+il1.wb_rate                  0.0000 # writeback rate (i.e., wrbks/ref)
+il1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+dl1.accesses              149608473 # total number of accesses
+dl1.hits                  144999326 # total number of hits
+dl1.misses                  4609147 # total number of misses
+dl1.replacements            4608123 # total number of replacements
+dl1.writebacks              2523378 # total number of writebacks
+dl1.invalidations                 0 # total number of invalidations
+dl1.miss_rate                0.0308 # miss rate (i.e., misses/ref)
+dl1.repl_rate                0.0308 # replacement rate (i.e., repls/ref)
+dl1.wb_rate                  0.0169 # writeback rate (i.e., wrbks/ref)
+dl1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+ld_text_base             0x00400000 # program text (code) segment base
+ld_text_size                 990928 # program text (code) size in bytes
+ld_data_base             0x10000000 # program initialized data segment base
+ld_data_size                 129172 # program init'ed `.data' and uninit'ed `.bss' size in bytes
+ld_stack_base            0x7fffc000 # program stack segment base (highest address in stack)
+ld_stack_size                 16384 # program initial stack size
+ld_prog_entry            0x00400140 # program entry point (initial PC)
+ld_environ_base          0x7fff8000 # program environment base address address
+ld_target_big_endian              0 # target executable endian-ness, non-zero if big endian
+mem.page_count                 2370 # total number of pages allocated
+mem.page_mem                  9480k # total size of memory pages allocated
+mem.ptab_misses               40971 # total first level page table misses
+mem.ptab_accesses         565448076 # total page table accesses
+mem.ptab_miss_rate           0.0001 # first level page table miss rate
