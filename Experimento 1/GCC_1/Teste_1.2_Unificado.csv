@@ -1,6 +1,0 @@
-Metric,Value
-il1.miss_rate,1.0000
-ul2.miss_rate,1.0000
-itlb.miss_rate,1.0000
-dtlb.miss_rate,1.0000
-mem.ptab_miss_rate,0.0000
