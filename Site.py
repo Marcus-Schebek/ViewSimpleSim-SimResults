@@ -11,15 +11,25 @@ st.set_page_config(layout="wide", page_title="Análise de Experimentos")
 
 # Dados hardcoded para o Experimento 1
 dados_experimento_1 = {
-    "Separado": {
-        "Acessos": 61934173,
-        "Hits": 32401739,
-        "Misses": 61934173 - 32401739,
+    "GCC_1": {
+        "Separado": {
+            "Hit Rate": 52.3,
+            "Miss Rate": 47.7,
+        },
+        "Unificado": {
+            "Hit Rate": 91.14,
+            "Miss Rate": 8.86,
+        },
     },
-    "Unificado": {
-        "Acessos": 62055905,
-        "Hits": 56558003,
-        "Misses": 62055905 - 56558003,
+    "VORTEX_2": {
+        "Separado": {
+            "Hit Rate": 90.1,
+            "Miss Rate": 9.9,
+        },
+        "Unificado": {
+            "Hit Rate": 94.7,
+            "Miss Rate": 5.3,
+        },
     }
 }
 
@@ -51,25 +61,24 @@ def extract_test_order(file_name):
         return float(match.group(1))
     return 0
 
-# Função para calcular as taxas de hit e miss
-def calcular_taxas(acessos, hits, misses):
-    taxa_hit = (hits / acessos) * 100
-    taxa_miss = (misses / acessos) * 100
-    return taxa_hit, taxa_miss
-
 # Função para gerar gráfico de linha de tempo
-def gerar_grafico_linha(taxas_separado, taxas_unificado):
+def gerar_grafico_linha(dados, teste):
     # Cria um DataFrame para os dados
     dados_grafico = pd.DataFrame({
-        "Teste": ["Separado", "Separado", "Unificado", "Unificado"],
         "Tipo": ["Hit Rate", "Miss Rate", "Hit Rate", "Miss Rate"],
-        "Taxa (%)": [taxas_separado[0], taxas_separado[1], taxas_unificado[0], taxas_unificado[1]]
+        "Cache": ["Separado", "Separado", "Unificado", "Unificado"],
+        "Taxa (%)": [
+            dados[teste]["Separado"]["Hit Rate"],
+            dados[teste]["Separado"]["Miss Rate"],
+            dados[teste]["Unificado"]["Hit Rate"],
+            dados[teste]["Unificado"]["Miss Rate"],
+        ]
     })
 
     # Gera o gráfico de linha
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=dados_grafico, x="Teste", y="Taxa (%)", hue="Tipo", marker="o", markersize=10)
-    plt.title("Comparação de Hit Rate e Miss Rate no Experimento 1")
+    sns.lineplot(data=dados_grafico, x="Cache", y="Taxa (%)", hue="Tipo", marker="o", markersize=10)
+    plt.title(f"Comparação de Hit Rate e Miss Rate para {teste}")
     plt.xlabel("Tipo de Cache")
     plt.ylabel("Taxa (%)")
     plt.ylim(0, 100)  # Limita o eixo Y de 0% a 100%
@@ -93,35 +102,16 @@ st.sidebar.title("Navegação")
 selected_experiment = st.sidebar.selectbox("Selecione o Experimento", ["Experimento 1", "Experimento 2.1", "Experimento 2.2", "Experimento 3", "Experimento 4"])
 experiment_path = os.path.join(experiments_dir, selected_experiment)
 
-# Carregamento dos dados (ignora CSV para o Experimento 1)
+# Caso especial para o Experimento 1
 if selected_experiment == "Experimento 1":
     st.title("Análise do Experimento 1")
 
-    # Calcula as taxas de hit e miss para cada teste
-    taxas_separado = calcular_taxas(
-        dados_experimento_1["Separado"]["Acessos"],
-        dados_experimento_1["Separado"]["Hits"],
-        dados_experimento_1["Separado"]["Misses"]
-    )
-
-    taxas_unificado = calcular_taxas(
-        dados_experimento_1["Unificado"]["Acessos"],
-        dados_experimento_1["Unificado"]["Hits"],
-        dados_experimento_1["Unificado"]["Misses"]
-    )
-
-    # Exibe as taxas em texto
-    st.subheader("Taxas de Hit e Miss")
-    st.write(f"**Separado:**")
-    st.write(f"- Hit Rate: {taxas_separado[0]:.1f}%")
-    st.write(f"- Miss Rate: {taxas_separado[1]:.1f}%")
-    st.write(f"**Unificado:**")
-    st.write(f"- Hit Rate: {taxas_unificado[0]:.1f}%")
-    st.write(f"- Miss Rate: {taxas_unificado[1]:.1f}%")
+    # Seleção do teste (GCC_1 ou VORTEX_2)
+    teste_selecionado = st.sidebar.selectbox("Selecione o Teste", ["GCC_1", "VORTEX_2"])
 
     # Gera o gráfico de linha de tempo
-    st.subheader("Gráfico de Comparação")
-    gerar_grafico_linha(taxas_separado, taxas_unificado)
+    st.subheader(f"Gráfico de Comparação para {teste_selecionado}")
+    gerar_grafico_linha(dados_experimento_1, teste_selecionado)
 
 else:
     # Carregamento dos dados para outros experimentos
