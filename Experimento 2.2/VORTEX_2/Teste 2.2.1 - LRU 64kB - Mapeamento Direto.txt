@@ -1,0 +1,32 @@
+./sim-cache -cache:il1 dl1 -cache:dl1 ul1:2048:32:1:l  -cache:il2 none -cache:dl2 none -tlb:itlb none -tlb:dtlb none vortex.ss tiny.in
+
+
+sim: ** simulation statistics **
+sim_num_insn               65008541 # total number of instructions executed
+sim_num_refs               34948670 # total number of loads and stores executed
+sim_elapsed_time                  7 # total simulation time in seconds
+sim_inst_rate          9286934.4286 # simulation speed (in insts/sec)
+ul1.accesses              214617014 # total number of accesses
+ul1.hits                  209885869 # total number of hits
+ul1.misses                  4731145 # total number of misses
+ul1.replacements            4729097 # total number of replacements
+ul1.writebacks              1387871 # total number of writebacks
+ul1.invalidations                 0 # total number of invalidations
+ul1.miss_rate                0.0220 # miss rate (i.e., misses/ref)
+ul1.repl_rate                0.0220 # replacement rate (i.e., repls/ref)
+ul1.wb_rate                  0.0065 # writeback rate (i.e., wrbks/ref)
+ul1.inv_rate                 0.0000 # invalidation rate (i.e., invs/ref)
+ld_text_base             0x00400000 # program text (code) segment base
+ld_text_size                 990928 # program text (code) size in bytes
+ld_data_base             0x10000000 # program initialized data segment base
+ld_data_size                 129172 # program init'ed `.data' and uninit'ed `.bss' size in bytes
+ld_stack_base            0x7fffc000 # program stack segment base (highest address in stack)
+ld_stack_size                 16384 # program initial stack size
+ld_prog_entry            0x00400140 # program entry point (initial PC)
+ld_environ_base          0x7fff8000 # program environment base address address
+ld_target_big_endian              0 # target executable endian-ness, non-zero if big endian
+mem.page_count                 2370 # total number of pages allocated
+mem.page_mem                  9480k # total size of memory pages allocated
+mem.ptab_misses               40971 # total first level page table misses
+mem.ptab_accesses         565448100 # total page table accesses
+mem.ptab_miss_rate           0.0001 # first level page table miss rate

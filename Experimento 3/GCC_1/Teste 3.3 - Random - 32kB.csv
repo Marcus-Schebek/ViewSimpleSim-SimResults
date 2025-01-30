@@ -1,0 +1,11 @@
+Metric,Value
+ul1.accesses,62055905
+ul1.hits,60653420
+ul1.misses,1402485
+ul1.replacements,1401973
+ul1.writebacks,123673
+ul1.invalidations,0
+ul1.miss_rate,0.0226
+mem.ptab_misses,713
+mem.ptab_accesses,227864722
+mem.ptab_miss_rate,0.0000

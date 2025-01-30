@@ -4,10 +4,24 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-import re  # Adicionado para usar expressões regulares
+import re
 
 # Configuração da página
 st.set_page_config(layout="wide", page_title="Análise de Experimentos")
+
+# Dados hardcoded para o Experimento 1
+dados_experimento_1 = {
+    "Separado": {
+        "Acessos": 61934173,
+        "Hits": 32401739,
+        "Misses": 61934173 - 32401739,
+    },
+    "Unificado": {
+        "Acessos": 62055905,
+        "Hits": 56558003,
+        "Misses": 62055905 - 56558003,
+    }
+}
 
 # Função para carregar os dados de um experimento
 def load_experiment_data(experiment_path):
@@ -32,59 +46,135 @@ def load_experiment_data(experiment_path):
 
 # Função para extrair a ordem numérica do nome do arquivo
 def extract_test_order(file_name):
-    # Extrai a parte "X.x" e converte para um número float
     match = re.search(r"(\d+\.\d+)", file_name)
     if match:
         return float(match.group(1))
-    return 0  # Caso não encontre um padrão numérico
+    return 0
+
+# Função para calcular as taxas de hit e miss
+def calcular_taxas(acessos, hits, misses):
+    taxa_hit = (hits / acessos) * 100
+    taxa_miss = (misses / acessos) * 100
+    return taxa_hit, taxa_miss
+
+# Função para gerar gráfico de linha de tempo
+def gerar_grafico_linha(taxas_separado, taxas_unificado):
+    # Cria um DataFrame para os dados
+    dados_grafico = pd.DataFrame({
+        "Teste": ["Separado", "Separado", "Unificado", "Unificado"],
+        "Tipo": ["Hit Rate", "Miss Rate", "Hit Rate", "Miss Rate"],
+        "Taxa (%)": [taxas_separado[0], taxas_separado[1], taxas_unificado[0], taxas_unificado[1]]
+    })
+
+    # Gera o gráfico de linha
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(data=dados_grafico, x="Teste", y="Taxa (%)", hue="Tipo", marker="o", markersize=10)
+    plt.title("Comparação de Hit Rate e Miss Rate no Experimento 1")
+    plt.xlabel("Tipo de Cache")
+    plt.ylabel("Taxa (%)")
+    plt.ylim(0, 100)  # Limita o eixo Y de 0% a 100%
+    plt.grid(True)  # Adiciona uma grade ao gráfico
+    st.pyplot(plt)
+
+# Função para formatar valores grandes no eixo Y
+def format_large_numbers(value, _):
+    if value >= 1e9:  # Bilhões
+        return f'{value / 1e9:.1f}B'
+    elif value >= 1e6:  # Milhões
+        return f'{value / 1e6:.1f}M'
+    elif value >= 1e3:  # Milhares
+        return f'{value / 1e3:.1f}K'
+    else:
+        return f'{value:.0f}'
 
 # Interface do Streamlit
 experiments_dir = "./" 
 st.sidebar.title("Navegação")
-selected_experiment = st.sidebar.selectbox("Selecione o Experimento", ["Experimento 1", "Experimento 2", "Experimento 3", "Experimento 4"])
+selected_experiment = st.sidebar.selectbox("Selecione o Experimento", ["Experimento 1", "Experimento 2.1", "Experimento 2.2", "Experimento 3", "Experimento 4"])
 experiment_path = os.path.join(experiments_dir, selected_experiment)
 
-# Carregamento dos dados
-experiment_data = load_experiment_data(experiment_path)
-if not experiment_data:
-    st.warning(f"Nenhum dado encontrado para {selected_experiment}.")
-else:
-    st.title(f"Análise do {selected_experiment}")
-    available_tests = [test for test in ["GCC_1", "VORTEX_2"] if test in experiment_data]
-    
-    if available_tests:
-        st.sidebar.subheader("Seleção do Teste") 
-        selected_test = st.sidebar.selectbox("Selecione o Teste", available_tests, key="test_selector")
-        
-        # Verifica se a coluna "Metric" existe
-        if "Metric" in experiment_data[selected_test].columns:
-            # Exibe todas as métricas disponíveis (sem filtrar por "_rate")
-            metrics = experiment_data[selected_test]["Metric"].unique().tolist()
-            
-            if metrics:
-                selected_metric = st.selectbox("Selecione a Métrica para Análise", metrics, key="metric_selector")
-                metric_data = experiment_data[selected_test][experiment_data[selected_test]["Metric"] == selected_metric]
-                metric_data["Teste"] = selected_test
-                
-                if not metric_data.empty:
-                    # Ordena os dados com base na ordem numérica extraída
-                    metric_data["Test Order"] = metric_data["Source File"].apply(extract_test_order)
-                    metric_data = metric_data.sort_values(by="Test Order")
+# Carregamento dos dados (ignora CSV para o Experimento 1)
+if selected_experiment == "Experimento 1":
+    st.title("Análise do Experimento 1")
 
-                    # Gera o gráfico
-                    st.subheader(selected_test)
-                    plt.figure(figsize=(10, 6))
-                    sns.lineplot(data=metric_data, x='Source File', y='Value', marker='o', color='b')
-                    plt.title(f'Valor da Métrica {selected_metric} para {selected_test}')
-                    plt.xlabel('Arquivo CSV')
-                    plt.ylabel('Valor da Métrica (%)')
-                    plt.gca().yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x * 100:.2f}%'))
-                    plt.xticks(rotation=45, ha='right')
-                    st.pyplot(plt)
+    # Calcula as taxas de hit e miss para cada teste
+    taxas_separado = calcular_taxas(
+        dados_experimento_1["Separado"]["Acessos"],
+        dados_experimento_1["Separado"]["Hits"],
+        dados_experimento_1["Separado"]["Misses"]
+    )
+
+    taxas_unificado = calcular_taxas(
+        dados_experimento_1["Unificado"]["Acessos"],
+        dados_experimento_1["Unificado"]["Hits"],
+        dados_experimento_1["Unificado"]["Misses"]
+    )
+
+    # Exibe as taxas em texto
+    st.subheader("Taxas de Hit e Miss")
+    st.write(f"**Separado:**")
+    st.write(f"- Hit Rate: {taxas_separado[0]:.1f}%")
+    st.write(f"- Miss Rate: {taxas_separado[1]:.1f}%")
+    st.write(f"**Unificado:**")
+    st.write(f"- Hit Rate: {taxas_unificado[0]:.1f}%")
+    st.write(f"- Miss Rate: {taxas_unificado[1]:.1f}%")
+
+    # Gera o gráfico de linha de tempo
+    st.subheader("Gráfico de Comparação")
+    gerar_grafico_linha(taxas_separado, taxas_unificado)
+
+else:
+    # Carregamento dos dados para outros experimentos
+    experiment_data = load_experiment_data(experiment_path)
+    if not experiment_data:
+        st.warning(f"Nenhum dado encontrado para {selected_experiment}.")
+    else:
+        st.title(f"Análise do {selected_experiment}")
+        available_tests = [test for test in ["GCC_1", "VORTEX_2"] if test in experiment_data]
+        
+        if available_tests:
+            st.sidebar.subheader("Seleção do Teste") 
+            selected_test = st.sidebar.selectbox("Selecione o Teste", available_tests, key="test_selector")
+            
+            if "Metric" in experiment_data[selected_test].columns:
+                metrics = experiment_data[selected_test]["Metric"].unique().tolist()
+                
+                if metrics:
+                    selected_metric = st.selectbox("Selecione a Métrica para Análise", metrics, key="metric_selector")
+                    metric_data = experiment_data[selected_test][experiment_data[selected_test]["Metric"] == selected_metric]
+                    metric_data["Teste"] = selected_test
                     
+                    if not metric_data.empty:
+                        metric_data["Test Order"] = metric_data["Source File"].apply(extract_test_order)
+                        metric_data = metric_data.sort_values(by="Test Order")
+
+                        # Gera o gráfico
+                        st.subheader(selected_test)
+                        plt.figure(figsize=(10, 6))
+                        
+                        if "miss_rate" in selected_metric.lower():
+                            # Gráfico de linha para métricas com "miss_rate"
+                            sns.lineplot(data=metric_data, x='Source File', y='Value', marker='o', color='b')
+                            plt.title(f'Valor da Métrica {selected_metric} para {selected_test}')
+                            plt.xlabel('Arquivo CSV')
+                            plt.ylabel('Valor da Métrica (%)')
+                            plt.gca().yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x * 100:.2f}%'))  # Formato de porcentagem
+                            plt.xticks(rotation=45, ha='right')
+                            
+                        else:
+                            # Gráfico de coluna para outras métricas
+                            sns.barplot(data=metric_data, x='Source File', y='Value', color='b')
+                            plt.title(f'Valor da Métrica {selected_metric} para {selected_test}')
+                            plt.xlabel('Arquivo CSV')
+                            plt.ylabel('Valor da Métrica')
+                            plt.gca().yaxis.set_major_formatter(mtick.FuncFormatter(format_large_numbers))  # Formata valores grandes
+                            plt.xticks(rotation=45, ha='right')
+                        
+                        st.pyplot(plt)
+                        
+                    else:
+                        st.warning("Nenhum dado disponível para exibição de métricas.")
                 else:
-                    st.warning("Nenhum dado disponível para exibição de métricas.")
+                    st.warning("Nenhuma métrica foi encontrada.")
             else:
-                st.warning("Nenhuma métrica foi encontrada.")
-        else:
-            st.warning("A coluna 'Metric' não foi encontrada nos dados.")
+                st.warning("A coluna 'Metric' não foi encontrada nos dados.")
